@@ -23,8 +23,6 @@ setupLocator() async {
       ProductImplement(dataSourceI: locator()));
   locator.registerSingleton(
       ProductStore(getRepository: GetUseCase(repositoryI: locator())));
-      locator.registerSingleton(
-      ProductStore(deleteRepository: DeleteUseCase(repositoryI: locator())));
-       locator.registerSingleton(
-      ProductStore(updateRepository:UpdateUseCase(repositoryI: locator())));
+      locator.registerSingleton(DeleteUseCase(repositoryI: locator()));
+       locator.registerSingleton(UpdateUseCase(repositoryI: locator()));
 }
