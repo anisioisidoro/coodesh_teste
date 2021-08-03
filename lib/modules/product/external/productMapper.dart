@@ -18,21 +18,22 @@ class ProductMapper {
   String type;
   String description;
   String filename;
-  int height;
-  int width;
+  double height;
+  double width;
   double price;
   int rating;
   DocumentReference documentReference;
 
-  static ProductModel fromDocument(Map<String, dynamic> doc) => ProductModel(
-        title: doc["title"] == null ? null : doc["title"],
-        type: doc["type"] == null ? null : doc["type"],
-        description: doc["description"] == null ? null : doc["description"],
-        filename: doc["filename"] == null ? null : doc["filename"],
-        height: doc["height"] == null ? null : doc["height"],
-        width: doc["width"] == null ? null : doc["width"],
-        price: doc["price"] == null ? null : doc["price"].toDouble(),
-        rating: doc["rating"] == null ? null : doc["rating"],
+  static ProductModel fromDocument(QueryDocumentSnapshot doc,) => ProductModel(
+        title: doc.data()["title"] == null ? null : doc.data()["title"],
+        type: doc.data()["type"] == null ? null : doc.data()["type"],
+        description: doc.data()["description"] == null ? null : doc.data()["description"],
+        filename: doc.data()["filename"] == null ? null : doc.data()["filename"],
+        height: doc.data()["height"] == null ? null : doc.data()["height"],
+        width: doc.data()["width"] == null ? null : doc.data()["width"],
+        price: doc.data()["price"] == null ? null : doc.data()["price"].toDouble(),
+        rating: doc.data()["rating"] == null ? null : doc.data()["rating"],
+        documentReference: doc.reference == null ? null : doc.reference
       );
 
   Map<String, dynamic> toJson() => {

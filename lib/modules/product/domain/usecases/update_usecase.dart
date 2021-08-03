@@ -18,6 +18,11 @@ class UpdateUseCase implements UpdateUseCaseI {
   @override
   Future<Either<ProductException, Message>> update(
       {ProductMapper productModel}) async {
+
+        if(isNull(productModel?.documentReference?.id)){
+          return Left(
+          ProductException(message: "O id do documento não pode ser um campo vazio"));
+        }
     if (isNull(productModel?.title)) {
       return Left(
           ProductException(message: "O titulo não pode ser um campo vazio"));
@@ -31,6 +36,10 @@ class UpdateUseCase implements UpdateUseCaseI {
     if (isNull(productModel?.price?.toString())) {
       return Left(
           ProductException(message: "digite o preço no formato valido"));
+    }
+    if (productModel.rating<0 || productModel.rating>4) {
+      return Left(
+          ProductException(message: "A avaliação não pode ser menor que 0 e maior que 4"));
     }
 
     return await repositoryI.update(productModel: productModel);

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_challenges/service/service_locator.dart';
+import 'package:flutter_challenges/store/product_store/product_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'component/card_widget.dart';
 
@@ -9,20 +12,48 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage>  {
+  ProductStore productStore;
+
+  @override
+  void initState() {
+    productStore =locator.get<ProductStore>();
+  
+      productStore.getProduct();
+
+    
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: ListView(
-        children: [
-          CardWidget(),
-          CardWidget(),
-          CardWidget(),
-          CardWidget(),
-          CardWidget(),
-          CardWidget(),
-        ],
+      body: Observer(
+        builder: (_) {
+          if (productStore.isLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (productStore?.productModel == null ||
+              productStore.productModel.length == 0) {
+            return Center(child: Text("Não há productos"));
+          }
+
+          return ListView.builder(
+            itemCount: productStore.productModel.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 13),
+                child: CardWidget(
+                  product: productStore.productModel[index],
+                ),
+              );
+            },
+          );
+        },
       ),
       bottomNavigationBar: Container(
           width: size.width,
@@ -30,8 +61,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           color: Color(0xFFDFE6ED),
           child: Center(
             child: Icon(
+              
               Icons.home,
               size: 60,
+              color: Colors.white,
             ),
           )),
     );

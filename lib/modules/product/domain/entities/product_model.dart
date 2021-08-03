@@ -19,8 +19,8 @@ class ProductModel {
   String type;
   String description;
   String filename;
-  int height;
-  int width;
+  double height;
+  double width;
   double price;
   int rating;
   DocumentReference documentReference;

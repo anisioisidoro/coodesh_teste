@@ -14,15 +14,17 @@ import 'package:get_it/get_it.dart';
 GetIt locator = GetIt.instance;
 
 setupLocator() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  
 
   locator.registerSingleton<ProductDataSourceI>(
       ProductFirebase(firestore: FirebaseFirestore.instance));
   locator.registerSingleton<ProductRepositoryI>(
       ProductImplement(dataSourceI: locator()));
-  locator.registerSingleton(
-      ProductStore(getRepository: GetUseCase(repositoryI: locator())));
-      locator.registerSingleton(DeleteUseCase(repositoryI: locator()));
-       locator.registerSingleton(UpdateUseCase(repositoryI: locator()));
+      locator.registerSingleton<GetUseCaseI>(
+      GetUseCase(repositoryI: locator()));
+  locator.registerSingleton(ProductStore(
+    getRepository: locator(),
+    deleteRepository: DeleteUseCase(repositoryI: locator()),
+    updateRepository:UpdateUseCase(repositoryI: locator())
+  ));
 }

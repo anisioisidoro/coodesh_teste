@@ -12,7 +12,7 @@ class ProductFirebase implements ProductDataSourceI {
   Future<List<ProductModel>> get() async {
     var document = await firestore.collection("products").get();
     return document.docs.map((doc) {
-      return ProductMapper.fromDocument(doc.data());
+      return ProductMapper.fromDocument(doc);
     }).toList();
   }
 
@@ -30,8 +30,18 @@ class ProductFirebase implements ProductDataSourceI {
   }
 
   @override
-  Future<Message> update({ProductMapper productModel}) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<Message> update({ProductMapper productModel}) async {
+    var documentVerify = await firestore
+        .collection("products")
+        .doc(productModel.documentReference.id)
+        .get();
+    if (documentVerify.exists) {
+       await firestore
+          .collection("products")
+          .doc(productModel.documentReference.id)
+          .update(productModel.toJson());
+      return Message(message: "producto atualizado com sucesso", sucess: true);
+    }
+    return Message(message: "Producto inexistente", sucess: false);
   }
 }
