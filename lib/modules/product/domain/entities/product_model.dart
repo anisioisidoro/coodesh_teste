@@ -13,6 +13,7 @@ class ProductModel {
     this.price,
     this.rating,
     this.documentReference,
+    this.dateTime,
   });
 
   String title;
@@ -24,4 +25,5 @@ class ProductModel {
   double price;
   int rating;
   DocumentReference documentReference;
+  DateTime dateTime;
 }

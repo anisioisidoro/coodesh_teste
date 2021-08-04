@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_challenges/modules/product/domain/entities/product_model.dart';
 import 'package:flutter_challenges/modules/product/domain/errors/error.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_challenges/modules/product/domain/usecases/delete_usecas
 import 'package:flutter_challenges/modules/product/domain/usecases/get_usecase.dart';
 import 'package:flutter_challenges/modules/product/domain/usecases/update_usecase.dart';
 import 'package:flutter_challenges/modules/product/external/productMapper.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 part 'product_store.g.dart';
 
@@ -48,32 +50,36 @@ abstract class _ProductStoreBase with Store {
     }
   }
 
- @action
-  Future<Either<ProductException, Message>> update({ProductMapper productModel}) async{
+  @action
+  Future<Either<ProductException, Message>> update(
+      {ProductMapper productModel}) async {
     try {
       isLoadingUpdate = true;
       var result = await updateRepository.update(productModel: productModel);
 
-      return result.fold(
-          (l) => Left(l), (r) => Right(r));
+      return result.fold((l) => Left(l), (r) => Right(r));
     } catch (e) {
       return Left(ProductException(message: e.message));
     } finally {
       isLoadingUpdate = false;
     }
   }
- @action
-  Future<Either<ProductException, Message>> delete({String idProduct}) async{
+
+  @action
+  Future<Either<ProductException, Message>> delete({String idProduct}) async {
     try {
       isLoadingDelete = true;
       var result = await deleteRepository.delete(idProduct: idProduct);
 
-      return result.fold(
-          (l) => Left(l), (r) => Right(r));
+      return result.fold((l) => Left(l), (r) => Right(r));
     } catch (e) {
       return Left(ProductException(message: e.message));
     } finally {
       isLoadingDelete = false;
     }
+  }
+
+  String convertDate(DateTime timestamp) {
+    return DateFormat("dd-MM-yyyy").format(timestamp);
   }
 }

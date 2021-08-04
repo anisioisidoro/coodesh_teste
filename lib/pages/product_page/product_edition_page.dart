@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_challenges/modules/product/domain/entities/product_model.dart';
 import 'package:flutter_challenges/modules/product/external/productMapper.dart';
-import 'package:flutter_challenges/pages/product_edition_page/component/text_field_widget.dart';
 import 'package:flutter_challenges/service/service_locator.dart';
 import 'package:flutter_challenges/store/product_store/product_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'component/button_widget.dart';
+import 'component/text_field_widget.dart';
 
 class ProductEditionPage extends StatefulWidget {
   const ProductEditionPage({Key key, this.product}) : super(key: key);
@@ -130,6 +130,7 @@ class _ProductEditionPageState extends State<ProductEditionPage> {
                             Duration(seconds: 2), () => Navigator.pop(context));
                       }
                       return globalKey.currentState.showSnackBar(SnackBar(
+                        backgroundColor: Colors.red,
                         content: Text(r?.message ?? ""),
                       ));
                     });

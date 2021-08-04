@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_challenges/modules/product/domain/entities/product_model.dart';
-import 'package:flutter_challenges/pages/product_edition_page/product_edition_page.dart';
+import 'package:flutter_challenges/pages/product_page/product_edition_page.dart';
+
 import 'package:flutter_challenges/service/service_locator.dart';
 import 'package:flutter_challenges/store/product_store/product_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 
 class CardWidget extends StatefulWidget {
   final ProductModel product;
-  const CardWidget({Key key, this.product}) : super(key: key);
+  final GlobalKey<ScaffoldState> globalKey;
+  const CardWidget({this.globalKey, this.product});
 
   @override
   _CardWidgetState createState() => _CardWidgetState();
@@ -36,15 +39,33 @@ class _CardWidgetState extends State<CardWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 100,
-                height: 100,
-                child: Image.asset("assets/images/${widget.product.filename}"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 40, left: 20),
+                    width: 100,
+                    height: 100,
+                    child: Image.asset(
+                      "assets/images/${widget.product.filename}",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Text(
+                      "Created: ${_productStore.convertDate(widget.product.dateTime)}")
+                ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(widget.product?.title ?? ""),
+                  Container(
+                    width: 100,
+                    child: Text(
+                      widget.product?.title ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
+                    ),
+                  ),
                   Row(
                     children: List.generate(widget.product?.rating ?? 0,
                         (index) => Icon(Icons.star, color: Color(0xFF5F52F3))),
@@ -101,7 +122,27 @@ class _CardWidgetState extends State<CardWidget> {
                                                 idProduct: widget.product
                                                     .documentReference.id)
                                             .then((value) {
-                                          _productStore.getProduct();
+                                          value.fold((l) {
+                                            return widget.globalKey.currentState
+                                                .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(l?.message ?? ""),
+                                            ));
+                                          }, (r) {
+                                            if (r.sucess) {
+                                              widget.globalKey.currentState
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(r?.message ?? ""),
+                                              ));
+                                             return  _productStore.getProduct();
+                                              
+                                            }
+                                            return widget.globalKey.currentState
+                                                .showSnackBar(SnackBar(
+                                                  backgroundColor: Colors.red,
+                                              content: Text(r?.message ?? ""),
+                                            ));
+                                          });
 
                                           Navigator.pop(context);
                                         });

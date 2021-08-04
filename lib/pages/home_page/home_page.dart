@@ -12,16 +12,16 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>  {
+class _HomePageState extends State<HomePage> {
   ProductStore productStore;
+  GlobalKey<ScaffoldState> globalKey;
 
   @override
   void initState() {
-    productStore =locator.get<ProductStore>();
-  
-      productStore.getProduct();
+    productStore = locator.get<ProductStore>();
+    globalKey = GlobalKey<ScaffoldState>();
+    productStore.getProduct();
 
-    
     super.initState();
   }
 
@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage>  {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: globalKey,
       body: Observer(
         builder: (_) {
           if (productStore.isLoading) {
@@ -48,6 +49,7 @@ class _HomePageState extends State<HomePage>  {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 13),
                 child: CardWidget(
+                  globalKey: globalKey,
                   product: productStore.productModel[index],
                 ),
               );
@@ -61,7 +63,6 @@ class _HomePageState extends State<HomePage>  {
           color: Color(0xFFDFE6ED),
           child: Center(
             child: Icon(
-              
               Icons.home,
               size: 60,
               color: Colors.white,
