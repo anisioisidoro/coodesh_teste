@@ -9,6 +9,7 @@ void main() async{
   await Firebase.initializeApp();
   setupLocator();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: HomePage(),
   ));
 }

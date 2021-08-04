@@ -116,23 +116,26 @@ class _ProductEditionPageState extends State<ProductEditionPage> {
                               filename: widget.product?.filename))
                       .then((value) {
                     value.fold((l) {
-                      return globalKey.currentState.showSnackBar(SnackBar(
+                       globalKey.currentState.showSnackBar(SnackBar(
                         backgroundColor: Colors.red,
                         content: Text(l?.message ?? ""),
                       ));
+                      return;
                     }, (r) {
                       if (r.sucess) {
                         globalKey.currentState.showSnackBar(SnackBar(
                           content: Text(r?.message ?? ""),
                         ));
                         _productStore.getProduct();
-                        return Future.delayed(
+                         Future.delayed(
                             Duration(seconds: 2), () => Navigator.pop(context));
+                            return;
                       }
-                      return globalKey.currentState.showSnackBar(SnackBar(
+                       globalKey.currentState.showSnackBar(SnackBar(
                         backgroundColor: Colors.red,
                         content: Text(r?.message ?? ""),
                       ));
+                      return;
                     });
                   }),
                 );

@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       key: globalKey,
       body: Observer(
         builder: (_) {
-          if (productStore.isLoading) {
+          if (productStore.isLoading && productStore?.productModel==null) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -57,17 +57,18 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      bottomNavigationBar: Container(
-          width: size.width,
-          height: 70,
-          color: Color(0xFFDFE6ED),
-          child: Center(
-            child: Icon(
-              Icons.home,
-              size: 60,
-              color: Colors.white,
-            ),
-          )),
+      bottomNavigationBar:  Container(
+            width: size.width,
+            height: 70,
+            color: Color(0xFFDFE6ED),
+            child: Center(
+              child: Icon(
+                Icons.home,
+                size: 60,
+                color: Colors.white,
+              ),
+            )),
+      
     );
   }
 }

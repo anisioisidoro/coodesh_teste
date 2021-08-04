@@ -123,25 +123,28 @@ class _CardWidgetState extends State<CardWidget> {
                                                     .documentReference.id)
                                             .then((value) {
                                           value.fold((l) {
-                                            return widget.globalKey.currentState
+                                             widget.globalKey.currentState
                                                 .showSnackBar(SnackBar(
                                               backgroundColor: Colors.red,
                                               content: Text(l?.message ?? ""),
                                             ));
+                                            return;
                                           }, (r) {
                                             if (r.sucess) {
                                               widget.globalKey.currentState
                                                   .showSnackBar(SnackBar(
                                                 content: Text(r?.message ?? ""),
                                               ));
-                                             return  _productStore.getProduct();
+                                               _productStore.getProduct();
+                                               return;
                                               
                                             }
-                                            return widget.globalKey.currentState
+                                             widget.globalKey.currentState
                                                 .showSnackBar(SnackBar(
                                                   backgroundColor: Colors.red,
                                               content: Text(r?.message ?? ""),
                                             ));
+                                            return;
                                           });
 
                                           Navigator.pop(context);
